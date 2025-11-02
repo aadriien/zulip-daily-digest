@@ -8,6 +8,7 @@
 import click # for args via CLI 
 
 from src.setup import create_client 
+from src.utils import get_all_subscribers
 
 
 class DailyDigestBot:
@@ -31,6 +32,8 @@ def launch_program(client, service):
     # Bot acts as a one-off script to perform action
     if client:
         click.echo("Running in client (one-off) mode...")
+        
+        get_all_subscribers(bot.client, "test-bot")
 
 
     # Bot acts as a service running in real-time
