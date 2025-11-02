@@ -21,14 +21,14 @@ def get_all_channels(client):
         for stream_obj in all_streams_objs
     ]
 
-    print(streams_name_id)
+    # print(streams_name_id)
     return streams_name_id
 
 
 def get_all_subscribers(client, channel_stream_name):
     result = client.get_subscribers(stream=channel_stream_name)
 
-    print(result)
+    # print(result)
     return result["subscribers"]
     
 
@@ -61,12 +61,12 @@ def fetch_messages_between_time(client, channel_stream, start_time, end_time):
         ]
 
 
-        for m in messages:
-            print(
-                time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(m["timestamp"])),
-                "-", m["sender_full_name"],
-                ":", m["content"]
-            )
+        # for m in messages:
+        #     print(
+        #         time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(m["timestamp"])),
+        #         "-", m["sender_full_name"],
+        #         ":", m["content"]
+        #     )
 
         return messages
     
@@ -78,8 +78,8 @@ def fetch_prev_day_messages(client, channel_stream):
     now = int(time.time()) 
     past_24_hours = now - 86400
 
-    print(f"\n\nNOW TIME: {now} — PAST TIME: {past_24_hours}")
-    print(f"NOW TIME: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(now))} — PAST TIME: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(past_24_hours))}\n\n")
+    # print(f"\n\nNOW TIME: {now} — PAST TIME: {past_24_hours}")
+    # print(f"NOW TIME: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(now))} — PAST TIME: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime(past_24_hours))}\n\n")
 
     messages = fetch_messages_between_time(
         client, 
@@ -88,7 +88,7 @@ def fetch_prev_day_messages(client, channel_stream):
     )
 
     if messages:
-        print(messages)
+        # print(messages)
         return messages
     
     return None
