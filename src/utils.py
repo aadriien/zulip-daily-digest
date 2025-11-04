@@ -6,6 +6,7 @@
 
 
 import time
+from datetime import date, timedelta
 
 
 def get_all_channels(client):
@@ -92,6 +93,21 @@ def fetch_prev_day_messages(client, channel_stream):
         return messages
     
     return None
+
+
+def get_pretty_date_yesterday():
+    # Get today's date in order to retrieve yesterday
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    # Format date (pretty)
+    #   %A == full weekday name
+    #   %B == full month name
+    #   %d == day of month 
+    #   %Y == full year
+    pretty_date = yesterday.strftime("%A, %B %d, %Y")
+
+    return pretty_date
 
 
 

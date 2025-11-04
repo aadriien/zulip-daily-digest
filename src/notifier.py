@@ -5,6 +5,7 @@
 ###############################################################################
 
 
+from src.utils import get_pretty_date_yesterday
 from src.parse import review_all_channels
 
 
@@ -18,7 +19,8 @@ def send_dm(client, user_id, text_content):
 
 
 def construct_user_digest(channel_summaries_obj):
-    full_digest = ""
+    yesterday_pretty_date = get_pretty_date_yesterday()
+    full_digest = f"# :test1: RC Daily Digest — {yesterday_pretty_date}"
 
     for summary_obj in channel_summaries_obj:
         stream_name, summary = summary_obj["stream_name"], summary_obj["summary"]
