@@ -38,6 +38,17 @@ def review_all_channels(client):
 
     for channel_obj in channels:
         stream_name, stream_id = channel_obj["stream_name"], channel_obj["stream_id"]
+
+        # For the time being, skip a few channels, e.g. checkins & alumni checkins
+        CHANNELS_TO_SKIP = [
+            "checkins", 
+            "alumni checkins", 
+            "checkins - in person", 
+            "rsvps"
+        ]
+        if stream_name in CHANNELS_TO_SKIP:
+            continue
+
         messages_full = fetch_prev_day_messages(client, stream_name)
 
         if messages_full:
