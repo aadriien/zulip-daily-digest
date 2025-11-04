@@ -9,6 +9,10 @@ from src.utils import get_all_channels, get_all_subscribers, fetch_prev_day_mess
 from src.summarize import summarize_messages
 
 
+# Only provide service for those who have opted in
+OPT_IN_USERS = [890656]
+
+
 def extract_messages_info(messages_full):
     RELEVANT_FIELDS = [
         "id",
@@ -35,9 +39,7 @@ def extract_messages_info(messages_full):
 
 def review_all_channels(client):
     # Maintain mapping of user IDs to their subscribed channel summaries
-    OPT_IN_USERS = [890656]
     users_summaries_digest = dict.fromkeys(OPT_IN_USERS, [])
-
 
     channels = get_all_channels(client)
 
@@ -88,6 +90,7 @@ def review_all_channels(client):
 
 
     print(users_summaries_digest)
+    return users_summaries_digest
 
 
 

@@ -10,6 +10,7 @@ import click # for args via CLI
 from src.setup import create_client 
 from src.utils import get_all_channels, get_all_subscribers
 from src.parse import review_all_channels
+from src.notifier import send_users_digests
 
 
 class DailyDigestBot:
@@ -36,7 +37,8 @@ def launch_program(client, service):
 
         get_all_channels(bot.client)
         get_all_subscribers(bot.client, "test-bot")
-        review_all_channels(bot.client)
+        # review_all_channels(bot.client)
+        send_users_digests(bot.client)
 
 
     # Bot acts as a service running in real-time
