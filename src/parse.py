@@ -27,8 +27,8 @@ def extract_messages_info(messages_full):
 
         messages_compact.append(new_msg_obj)
 
-    for m in messages_compact:
-        print(f"\n{m}")
+    # for m in messages_compact:
+    #     print(f"\n{m}")
 
     return messages_compact
 
@@ -52,11 +52,25 @@ def review_all_channels(client):
         messages_full = fetch_prev_day_messages(client, stream_name)
 
         if messages_full:
-            print(f"\n\nREVIEWING CHANNEL: {stream_name}\n")
+            # print(f"\n\nREVIEWING CHANNEL: {stream_name}\n")
             messages_compact = extract_messages_info(messages_full)
 
             summarized = summarize_messages(messages_compact)
-            print(f"\nCHANNEL SUMMARY: {summarized}\n\n\n")
+            print(f"\n\nSUMMARY FOR CHANNEL — {stream_name}:")
+            print(f"\n{summarized}\n")
+
+
+
+
+# GENERAL APPROACH:
+
+# generate summaries for all channels
+# for each channel, get list of subscribed users
+# append specific channel summary to each subscribed user's mapping list
+# after iterating over channels, focus on individual users
+# take each user's list from earlier to construct full summaries
+# send out notification DM to them
+
 
 
 
