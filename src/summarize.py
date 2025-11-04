@@ -70,9 +70,11 @@ Provide a brief high-level summary (2-4 sentences) of what took place."""
             pad_token_id=tokenizer.eos_token_id
         )
     
-    # Decode & extract just assistant's response, then grab summary (after prompt)
-    full_response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    summary = full_response[len(prompt):].strip()
+    # Decode only newly generated tokens (skip input prompt)
+    input_length = inputs['input_ids'].shape[1]
+    generated_tokens = outputs[0][input_length:]
+    
+    summary = tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
     
     return summary
 
