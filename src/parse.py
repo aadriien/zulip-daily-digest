@@ -6,6 +6,7 @@
 
 
 from src.utils import get_all_channels, fetch_prev_day_messages
+from src.summarize import summarize_messages
 
 
 def extract_messages_info(messages_full):
@@ -42,6 +43,9 @@ def review_all_channels(client):
         if messages_full:
             print(f"\n\nREVIEWING CHANNEL: {stream_name}\n")
             messages_compact = extract_messages_info(messages_full)
+
+            summarized = summarize_messages(messages_compact)
+            print(f"\nCHANNEL SUMMARY: {summarized}\n\n\n")
 
 
 
