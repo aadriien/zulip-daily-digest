@@ -5,7 +5,7 @@
 ###############################################################################
 
 
-from src.utils import get_all_channels, fetch_prev_day_messages
+from src.utils import get_all_channels, get_all_subscribers, fetch_prev_day_messages
 from src.summarize import summarize_messages
 
 
@@ -34,6 +34,11 @@ def extract_messages_info(messages_full):
 
 
 def review_all_channels(client):
+    # Maintain mapping of user IDs to their subscribed channel summaries
+    OPT_IN_USERS = [890656]
+    users_summaries_digest = dict.fromkeys(OPT_IN_USERS, [])
+
+
     channels = get_all_channels(client)
 
     for channel_obj in channels:
@@ -46,6 +51,12 @@ def review_all_channels(client):
             "checkins - in person", 
             "rsvps"
         ]
+
+        TEST = ["397 Bridge", "pairing"]
+
+        if stream_name not in TEST:
+            continue
+
         if stream_name in CHANNELS_TO_SKIP:
             continue
 
@@ -55,10 +66,28 @@ def review_all_channels(client):
             # print(f"\n\nREVIEWING CHANNEL: {stream_name}\n")
             messages_compact = extract_messages_info(messages_full)
 
-            summarized = summarize_messages(messages_compact)
+            summarized_channel = summarize_messages(messages_compact)
             print(f"\n\nSUMMARY FOR CHANNEL — {stream_name}:")
-            print(f"\n{summarized}\n")
+            print(f"\n{summarized_channel}\n")
 
+            channel_summary_obj = {
+                "stream_name": stream_name,
+                "summary": summarized_channel
+            }
+
+
+            # Append summaries onto subscribed users' mappings inventory
+            subscribers = get_all_subscribers(client, stream_name)
+
+            # Ensure only focusing on opt-in users (via intersection)
+            subscribers_set, opt_in_set = set(subscribers), set(OPT_IN_USERS)
+            opt_in_subscribers = list(subscribers_set & opt_in_set)
+            
+            for subscriber in opt_in_subscribers:
+                users_summaries_digest[subscriber].append(channel_summary_obj)
+
+
+    print(users_summaries_digest)
 
 
 
