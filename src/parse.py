@@ -54,10 +54,10 @@ def review_all_channels(client):
             "rsvps"
         ]
 
-        TEST = ["397 Bridge", "pairing"]
+        # TEST = ["397 Bridge", "pairing"]
 
-        if stream_name not in TEST:
-            continue
+        # if stream_name not in TEST:
+        #     continue
 
         if stream_name in CHANNELS_TO_SKIP:
             continue

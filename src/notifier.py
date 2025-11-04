@@ -23,8 +23,13 @@ def construct_user_digest(channel_summaries_obj):
     for summary_obj in channel_summaries_obj:
         stream_name, summary = summary_obj["stream_name"], summary_obj["summary"]
 
-        headline_summary = f"#**{stream_name}**\n{summary}\n\n"
-        full_digest += headline_summary
+        headline = f"#**{stream_name}**"
+        spoiler_markdown = f"""
+```spoiler {headline}
+{summary}
+```
+"""
+        full_digest += spoiler_markdown
 
     return full_digest
 

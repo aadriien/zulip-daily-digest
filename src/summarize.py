@@ -44,7 +44,8 @@ Do NOT quote individuals directly or use "X said Y" format. Write in narrative f
 
 {conversation}
 
-Provide a brief high-level summary (2-4 sentences) of what took place."""
+Provide a brief high-level summary (1-2 sentences) of what took place.
+Be as concise as possible. The shorter the better. Do NOT write more than 1 sentence."""
     
     # Format as instruction chat
     messages = [
