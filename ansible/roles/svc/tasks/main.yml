@@ -1,0 +1,34 @@
+- file:
+    path: "{{ home }}/.config/systemd/user"
+    state: directory
+    mode: "0755"
+
+- copy:
+    dest: "{{ home }}/.config/systemd/user/zulip-daily-digest.service"
+    content: |
+      [Unit]
+      Description=zulip-daily-digest (service)
+      [Service]
+      Type=oneshot
+      WorkingDirectory={{ home }}/zulip-daily-digest
+      ExecStart=make all
+      [Install]
+      WantedBy=default.target
+
+- copy:
+    dest: "{{ home }}/.config/systemd/user/zulip-daily-digest.timer"
+    content: |
+      [Unit]
+      Description=zulip-daily-digest (timer)
+      [Timer]
+      OnBootSec=1min
+      OnUnitActiveSec=3min
+      [Install]
+      WantedBy=timers.target
+
+- systemd:
+    name: "zulip-daily-digest.timer"
+    scope: user
+    enabled: true
+    state: started
+    daemon_reload: true

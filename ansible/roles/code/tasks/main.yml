@@ -1,0 +1,20 @@
+- file:
+    path: "{{ tgt }}"
+    state: directory
+
+- copy:
+    src: "{{ repo }}/src/"
+    dest: "{{ tgt }}/src/"
+    mode: 0644
+
+- copy:
+    src: "{{ repo }}/{{ item }}"
+    dest: "{{ tgt }}/{{ item }}"
+    mode: 0600
+  with_items:
+    - bot.py
+    - Makefile
+    - poetry.lock
+    - pyproject.toml
+    - .env
+
