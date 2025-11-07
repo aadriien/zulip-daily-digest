@@ -31,9 +31,6 @@ def extract_messages_info(messages_full):
 
         messages_compact.append(new_msg_obj)
 
-    # for m in messages_compact:
-    #     print(f"\n{m}")
-
     return messages_compact
 
 
@@ -54,10 +51,10 @@ def review_all_channels(client):
             "rsvps"
         ]
 
-        TEST = ["397 Bridge", "pairing", "audio programming", "crosswords"]
+        # TEST = ["397 Bridge", "pairing", "audio programming", "crosswords"]
 
-        if stream_name not in TEST:
-            continue
+        # if stream_name not in TEST:
+        #     continue
 
         if stream_name in CHANNELS_TO_SKIP:
             continue
@@ -77,34 +74,19 @@ def review_all_channels(client):
                 "summary": summarized_channel
             }
 
-
-            # Append summaries onto subscribed users' mappings inventory
+            # Prep for appending summaries onto subscribed users' mappings inventory
             subscribers = get_all_subscribers(client, stream_name)
 
             # Ensure only focusing on opt-in users (via intersection)
             subscribers_set, opt_in_set = set(subscribers), set(OPT_IN_USERS)
             opt_in_subscribers = list(subscribers_set & opt_in_set)
 
-            print(f"\nopt-in for channel: {stream_name} — {opt_in_subscribers}")
+            print(f"\nOpt-in users for channel: {stream_name} — {opt_in_subscribers}")
             
             for subscriber in opt_in_subscribers:
                 users_summaries_digest[subscriber].append(channel_summary_obj)
 
-
-    print(users_summaries_digest)
     return users_summaries_digest
-
-
-
-# GENERAL APPROACH:
-
-# generate summaries for all channels
-# for each channel, get list of subscribed users
-# append specific channel summary to each subscribed user's mapping list
-# after iterating over channels, focus on individual users
-# take each user's list from earlier to construct full summaries
-# send out notification DM to them
-
 
 
 
