@@ -7,7 +7,7 @@ POETRY ?= poetry
 VENV_DIR = .venv
 PYTHON_VERSION = python3
 
-.PHONY: setup run-client run-service wget-model clean
+.PHONY: setup run-client run-service deploy-heap wget-model clean
 
 all: setup run-client
 
@@ -30,6 +30,9 @@ run-client:
 run-service: 
 	@$(POETRY) run python bot.py --service
 
+
+deploy-heap:
+	@ansible-playbook -i ansible/inventory ansible/deploy.yml 
 
 # Download Qwen model directly on Heap Cluster using wget
 wget-model:
