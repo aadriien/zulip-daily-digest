@@ -22,7 +22,7 @@
       Description=zulip-daily-digest (timer)
       [Timer]
       OnBootSec=1min
-      OnUnitActiveSec=3min
+      OnUnitActiveSec=20min
       [Install]
       WantedBy=timers.target
 
