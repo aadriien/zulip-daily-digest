@@ -39,7 +39,7 @@ def extract_messages_info(messages_full):
 
 def review_all_channels(client):
     # Maintain mapping of user IDs to their subscribed channel summaries
-    users_summaries_digest = dict.fromkeys(OPT_IN_USERS, [])
+    users_summaries_digest = {user_id: [] for user_id in OPT_IN_USERS}
 
     channels = get_all_channels(client)
 
@@ -54,10 +54,10 @@ def review_all_channels(client):
             "rsvps"
         ]
 
-        # TEST = ["397 Bridge", "pairing"]
+        TEST = ["397 Bridge", "pairing", "audio programming", "crosswords"]
 
-        # if stream_name not in TEST:
-        #     continue
+        if stream_name not in TEST:
+            continue
 
         if stream_name in CHANNELS_TO_SKIP:
             continue
@@ -84,6 +84,8 @@ def review_all_channels(client):
             # Ensure only focusing on opt-in users (via intersection)
             subscribers_set, opt_in_set = set(subscribers), set(OPT_IN_USERS)
             opt_in_subscribers = list(subscribers_set & opt_in_set)
+
+            print(f"\nopt-in for channel: {stream_name} — {opt_in_subscribers}")
             
             for subscriber in opt_in_subscribers:
                 users_summaries_digest[subscriber].append(channel_summary_obj)
