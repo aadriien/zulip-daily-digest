@@ -10,7 +10,7 @@ from src.summarize import summarize_messages
 
 
 # Only provide service for those who have opted in
-OPT_IN_USERS = [890656]
+OPT_IN_USERS = [890656, 902241]
 
 
 def extract_messages_info(messages_full):
