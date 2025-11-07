@@ -66,8 +66,6 @@ def review_all_channels(client):
             messages_compact = extract_messages_info(messages_full)
 
             summarized_channel = summarize_messages(messages_compact)
-            print(f"\n\nSUMMARY FOR CHANNEL — {stream_name}:")
-            print(f"\n{summarized_channel}\n")
 
             channel_summary_obj = {
                 "stream_name": stream_name,
@@ -81,7 +79,8 @@ def review_all_channels(client):
             subscribers_set, opt_in_set = set(subscribers), set(OPT_IN_USERS)
             opt_in_subscribers = list(subscribers_set & opt_in_set)
 
-            print(f"\nOpt-in users for channel: {stream_name} — {opt_in_subscribers}")
+            print(f"\n\nSUMMARY FOR CHANNEL —— {stream_name} —— with opt-in users: {opt_in_subscribers}")
+            print(f"\n{summarized_channel}\n")
             
             for subscriber in opt_in_subscribers:
                 users_summaries_digest[subscriber].append(channel_summary_obj)
