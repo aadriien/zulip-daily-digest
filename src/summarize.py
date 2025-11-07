@@ -5,26 +5,40 @@
 ###############################################################################
 
 
+import os
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
 
-# Load smaller instruction-tuned model for conversation summarization
-model_name = "Qwen/Qwen2.5-3B-Instruct"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+# Lazy load model only when needed
+_model = None
+_tokenizer = None
 
-# Set pad_token if not already set
-if tokenizer.pad_token is None:
-    tokenizer.pad_token = tokenizer.eos_token
-
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-    device_map="auto" if torch.cuda.is_available() else None
-)
+def _get_model_and_tokenizer():
+    global _model, _tokenizer
+    
+    if _model is None or _tokenizer is None:
+        model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "models", "Qwen2.5-1.5B-Instruct")
+        _tokenizer = AutoTokenizer.from_pretrained(model_path)
+        
+        # Set pad_token if not already set
+        if _tokenizer.pad_token is None:
+            _tokenizer.pad_token = _tokenizer.eos_token
+        
+        _model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            dtype=torch.float32, # Use float32 for CPU to avoid issues
+            device_map="cpu",
+            low_cpu_mem_usage=True
+        )
+    
+    return _model, _tokenizer
 
 
 def summarize_messages(messages_objs):    
+    # Lazy-load to avoid memory spike at import
+    model, tokenizer = _get_model_and_tokenizer()
+
     # Format messages as natural conversation
     formatted_messages = []
     for msg in messages_objs:
@@ -55,16 +69,16 @@ Be as concise as possible. The shorter the better. Do NOT write more than 1 sent
     
     # Apply chat template & tokenize with truncation (Qwen2.5 has 32k context)
     prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=8000)
-    
-    if torch.cuda.is_available():
-        inputs = {k: v.cuda() for k, v in inputs.items()}
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=4000)
+
+    # Force CPU tensors to avoid accidental GPU OOM / CUDA init
+    inputs = {k: v.to("cpu") for k, v in inputs.items()}
     
     # Generate summary
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
-            max_new_tokens=200,
+            max_new_tokens=120,
             temperature=0.7,
             do_sample=True,
             top_p=0.9,
