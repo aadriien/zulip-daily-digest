@@ -7,7 +7,7 @@ POETRY ?= poetry
 VENV_DIR = .venv
 PYTHON_VERSION = python3
 
-.PHONY: setup run-client run-service clean 
+.PHONY: setup run-client run-service wget-model clean
 
 all: setup run-client
 
@@ -29,6 +29,20 @@ run-client:
 # Run bot as live service instance
 run-service: 
 	@$(POETRY) run python bot.py --service
+
+
+# Download Qwen model directly on Heap Cluster using wget
+wget-model:
+	@echo "Downloading Qwen2.5-1.5B-Instruct model..."
+	@mkdir -p models
+	@cd models && \
+		if [ -d "Qwen2.5-1.5B-Instruct" ]; then \
+			echo "Model already exists. Skipping download."; \
+		else \
+			wget -r -np -nH --cut-dirs=1 --reject="index.html*" \
+				https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct/resolve/main/ && \
+			echo "Model download complete!"; \
+		fi
 
 
 clean:
