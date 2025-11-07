@@ -1,10 +1,11 @@
 # RC Zulip Daily Digest
 
+# Add Poetry's install location to PATH so Make can find it
+export PATH := $(HOME)/.local/bin:$(PATH)
+
 POETRY ?= poetry
 VENV_DIR = .venv
 PYTHON_VERSION = python3
-
-ACTIVATE_VENV = source $(VENV_DIR)/bin/activate &&
 
 .PHONY: setup run-client run-service clean 
 
@@ -23,11 +24,11 @@ setup:
 
 # Run bot as one-off client instance
 run-client: 
-	@$(ACTIVATE_VENV) $(POETRY) run python bot.py --client
+	@$(POETRY) run python bot.py --client
 
 # Run bot as live service instance
 run-service: 
-	@$(ACTIVATE_VENV) $(POETRY) run python bot.py --service
+	@$(POETRY) run python bot.py --service
 
 
 clean:
