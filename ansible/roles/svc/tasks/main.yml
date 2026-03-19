@@ -29,5 +29,5 @@
     name: "zulip-daily-digest.timer"
     scope: user
     enabled: true
-    state: restarted
+    state: started
     daemon_reload: true
